@@ -1,12 +1,14 @@
 from flask import Flask, request, abort, jsonify, session
 from flask_bcrypt import Bcrypt
 from flask_session import Session
+from flask_cors import CORS
 from models import db, User
 from config import ApplicationConfig
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
+CORS(app , supports_credentials = True)
 server_session = Session(app)
 db.init_app(app)
 
@@ -29,6 +31,8 @@ def register_user() :
     db.session.add(new_user)
     db.session.commit()
     
+    session["user_id"] = new_user.id
+
     return jsonify ({
         "id" : new_user.id,
         "email" : new_user.email

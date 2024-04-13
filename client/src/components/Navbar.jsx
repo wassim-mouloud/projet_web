@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
-import {Link, useResolvedPath, useMatch, useLocation} from 'react-router-dom'
+import {Link,useLocation} from 'react-router-dom'
 import '../App.css';
+import httpClient from '../httpClient';
 
 function Navbar() {
     const [active, setActive] = useState("Home")
     const {pathname}= useLocation()
+
+    const logoutUser = async () =>{
+        await httpClient.post("//localhost:8000/logout")
+        window.location.href = "/"
+    }
 
 
     return (
