@@ -16,27 +16,30 @@ with app.app_context() :
     db.create_all()
     
 @app.route("/register", methods=["POST"])
-def register_user() :
-        
+def register_user():
     email = request.json["email"]
     password = request.json["password"]
+    username = request.json["username"]  
+
+    user_exists = User.query.filter_by(email=email).first() is not None
     
-    user_exists = User.query.filter_by( email=email ).first() is not None
+    if user_exists:
+        return jsonify({"error": "User with this email already exists"}), 409
     
-    if user_exists :
-        return jsonify({"error" : "User already exists"}), 409
-    
-    hashed_password = bcrypt.generate_password_hash(password)
-    new_user = User (email = email,  password = hashed_password)
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')  
+    new_user = User(email=email, username=username, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
     
     session["user_id"] = new_user.id
 
-    return jsonify ({
-        "id" : new_user.id,
-        "email" : new_user.email
+    return jsonify({
+        "id": new_user.id,
+        "email": new_user.email,
+        "username": new_user.username  
     })
+
+
     
 @app.route("/login", methods=["POST"])
 def login_user():
@@ -57,7 +60,8 @@ def login_user():
     session["user_id"] = user.id
     return jsonify({
         "id": user.id,
-        "email": user.email
+        "email": user.email,
+        "username" : user.username
     })
 
     
@@ -74,7 +78,7 @@ def get_current_session():
 
     return jsonify({
         "id": user.id,
-        "email": user.email
+        "email": user.email,
     })
 
     
