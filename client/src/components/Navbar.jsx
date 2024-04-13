@@ -15,9 +15,9 @@ function Navbar() {
 
     const links = ['Home', 'Search', 'Movies', 'Series', 'Watchlist'];
     if (user) {
-        links.push('Logout');  // Add Logout link if user is logged in
+        links.push('Logout');  
     } else {
-        links.push('Login');   // Add Login link if user is not logged in
+        links.push('Login');   
     }
 
     return (

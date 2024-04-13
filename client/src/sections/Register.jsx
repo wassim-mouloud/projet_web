@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import httpClient from '../httpClient'
+import { Link } from 'react-router-dom'
 
 function Register() {
 
@@ -40,7 +41,7 @@ function Register() {
   return (
     <div className='' >
         <form className='h-[100vh] w-screen flex flex-col justify-center items-center gap-6' >
-                <img src="/images/disney-plus-logo.png" alt="" className='w-[300px] md:w-[400px]'/>
+                <Link to="/" ><img src="/images/disney-plus-logo.png" alt="" className='w-[300px] md:w-[400px]'/></Link>
                 <input onChange={(e)=> setUsername(e.target.value)} type="text" placeholder='Username' className='bg-[#31333e] text-[18px] md:text-[20px] rounded-md h-[55px] w-[80vw] sm:w-[380px] md:w-[450px] lg:w-[500px] p-5 text-white outline-gray-400 outline-[1px]' />
                 <input onChange={(e)=> setEmail(e.target.value)} type="email" placeholder='E-mail' className='bg-[#31333e] text-[18px] md:text-[20px] rounded-md h-[55px] w-[80vw] sm:w-[380px] md:w-[450px] lg:w-[500px] p-5 text-white outline-gray-400 outline-[1px]' />
                 <input onChange={(e)=> setPassword(e.target.value)} type="password" placeholder='Password' className='bg-[#31333e] text-[18px] md:text-[20px] rounded-md h-[55px] w-[80vw] sm:w-[380px] md:w-[450px] lg:w-[500px]  p-5 text-white outline-gray-400 outline-[1px]' />
