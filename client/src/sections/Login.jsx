@@ -6,7 +6,7 @@ function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const loginUser = async (e) => {
+    const loginUser = async () => {
     
       try {
         const resp = await httpClient.post("//localhost:8000/login", { email, password });
