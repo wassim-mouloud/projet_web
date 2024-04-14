@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import WatchlistCard from '../components/WatchlistCard'
+import httpClient from '../httpClient';
 
 function Watchlist({allWatchlist, setAllWatchlist, getMovies, getSeries, hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) {
 
-  const [watchlistSeries, setWatchlistSeries] = useState(null)
+  const [watchlistSeries, setWatchlistSeries] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   const fetchSeriesWatchlist = async () => {
     try {
-        setLoading(true);
-        const response = await httpClient.get('//localhost:8000/watchlist/series');
-        if (response.status === 200) {
-            const watchlist = response.data;
-            const isSeriesInWatchlist = watchlist.some(watchlistSeries => watchlistSeries.series_id === movie.id);
-            setIsInWatchlist(isSeriesInWatchlist);
-        } else {
-            alert('Failed to fetch watchlist');
-        }
+      setLoading(true); 
+      const response = await httpClient.get('//localhost:8000/watchlist/series');
+      if (response.status === 200) {
+        setWatchlistSeries(response.data); 
+      } else {
+        alert('Failed to fetch watchlist');
+      }
     } catch (error) {
-        console.error('Error fetching watchlist', error);
-        alert('Error communicating with server');
+      console.error('Error fetching watchlist', error);
+      alert('Error communicating with server');
     } finally {
-        setLoading(false);
+      setLoading(false); 
     }
-};
+  };
 
+  useEffect(() => {
+    fetchSeriesWatchlist(); 
+  }, []);
 
-  useEffect(()=>console.log())
+  useEffect(() => {
+    console.log(watchlistSeries);
+  }, [watchlistSeries]);
 
 
 
