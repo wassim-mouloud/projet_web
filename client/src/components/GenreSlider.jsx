@@ -38,6 +38,7 @@ function GenreSlider({hovered, hoveredMovieId, handleMouseEnter, handleMouseLeav
 
         getTrending()
       },[url1])
+
   return (
     <motion.div
     initial={{opacity:0}}

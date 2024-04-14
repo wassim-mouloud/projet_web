@@ -65,10 +65,10 @@ function Search({watchlistMovies, watchlistSeries , getWatchlistMovies, getWatch
                     <input ref={inputRef} onChange={handleChange} type="text" placeholder='Movies, shows and more' className='w-[100%] h-[40px] rounded-[7px] bg-[#262833] outline-none text-white text-[16px] lg:text-[18px]'/>
                 </div>
                 <p className='text-white  text-[20px] lg:text-[24px] font-semibold  my-6 ' >{title}</p>
-                <div  className='w-screen lg:w-[calc(100%-100px)] xl:w-[calc(100%-200px)] grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2  mb-[120px] lg:mb-0  ' >
-                    {content.map((movie, index) => 
-                        movie.poster_path ? (
-                            <SearchCard movie={movie} index={index}  watchlistMovies={watchlistMovies} watchlistSeries={watchlistSeries} getMovies={getWatchlistMovies} getSeries={getWatchlistSeries} addMovieToWatchlist={addMovieToWatchlist} addSeriesToWatchlist={addSeriesToWatchlist} hovered={hovered} setHovered={setHovered} hoveredMovieId={hoveredMovieId} setHoveredMovieId={setHoveredMovieId} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />
+                <div  className='w-[90%] lg:w-[calc(100%-100px)] xl:w-[calc(100%-200px)] grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2  mb-[120px] lg:mb-0  ' >
+                    {content.map((content, index) => 
+                        content.poster_path ? (
+                            <SearchCard movie={content} index={index}  watchlistMovies={watchlistMovies} watchlistSeries={watchlistSeries} getMovies={getWatchlistMovies} getSeries={getWatchlistSeries} addMovieToWatchlist={addMovieToWatchlist} addSeriesToWatchlist={addSeriesToWatchlist} hovered={hovered} setHovered={setHovered} hoveredMovieId={hoveredMovieId} setHoveredMovieId={setHoveredMovieId} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />
                         ) : null
                     )}
                 </div>

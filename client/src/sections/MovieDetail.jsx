@@ -25,8 +25,6 @@ function MovieDetail({hovered, hoveredMovieId, handleMouseEnter, handleMouseLeav
     const productionCompanyWithLogo = movie.production_companies ? movie.production_companies.find((company) => company.logo_path !== null) : null;
 
 
-
-
   return (
     <div>
         <Navbar/>

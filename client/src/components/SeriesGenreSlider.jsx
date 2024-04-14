@@ -14,6 +14,7 @@ function SeriesGenreSlider({title, url1, url2, mb}) {
         }
       };
 
+      useEffect(() => console.log(trending[0]), [trending])
 
       useEffect(()=>{
         async function getTrending(){
