@@ -177,6 +177,52 @@ def remove_series_from_watchlist():
         return jsonify({"error": "Series not found in watchlist"}), 404
 
 
+@app.route("/watchlist/movies", methods=["GET"])
+def get_watchlist_movies():
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    movies = WatchlistMovie.query.filter_by(user_id=user_id).all()
+    movies_list = [{
+        "movie_id": movie.movie_id,
+        "title": movie.title,
+        "overview": movie.overview,
+        "poster_path": movie.poster_path,
+        "backdrop_path": movie.backdrop_path,
+        "original_language": movie.original_language,
+        "release_date": movie.release_date,
+        "vote_average": movie.vote_average,
+        "vote_count": movie.vote_count,
+        "popularity": movie.popularity,
+        "genre_ids": movie.genre_ids
+    } for movie in movies]
+
+    return jsonify(movies_list), 200
+
+
+@app.route("/watchlist/series", methods=["GET"])
+def get_watchlist_series():
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    series = WatchlistSeries.query.filter_by(user_id=user_id).all()
+    series_list = [{
+        "series_id": series.series_id,
+        "name": series.name,
+        "overview": series.overview,
+        "poster_path": series.poster_path,
+        "backdrop_path": series.backdrop_path,
+        "original_language": series.original_language,
+        "first_air_date": series.first_air_date,
+        "vote_average": series.vote_average,
+        "vote_count": series.vote_count,
+        "popularity": series.popularity,
+        "genre_ids": series.genre_ids
+    } for series in series]
+
+    return jsonify(series_list), 200
 
 
     
