@@ -1,7 +1,93 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom';
+import httpClient from '../httpClient';
 
 function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, handleMouseLeave, hovered, hoveredMovieId}) {
+
+
+    const [isInWatchlist, setIsInWatchlist] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            try {
+                setLoading(true);
+                const response = await httpClient.get('//localhost:8000/watchlist/movies');
+                if (response.status === 200) {
+                    const watchlist = response.data;
+                    const isMovieInWatchlist = watchlist.some(watchlistMovie => watchlistMovie.movie_id === movie.id);
+                    setIsInWatchlist(isMovieInWatchlist);
+                } else {
+                    alert('Failed to fetch watchlist');
+                }
+            } catch (error) {
+                console.error('Error fetching watchlist', error);
+                alert('Error communicating with server');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchWatchlist();
+    }, [movie.id]);
+
+    const handleAddToWatchlist = async (e) => {
+
+        e.preventDefault();  
+        e.stopPropagation();
+    
+        const response = await httpClient.post('//localhost:8000/watchlist/movies/add', {
+            id: movie.id,
+            title: movie.title,
+            overview: movie.overview,
+            poster_path: movie.poster_path,
+            backdrop_path: movie.backdrop_path,
+            original_language: movie.original_language,
+            release_date: movie.release_date,
+            vote_average: movie.vote_average,
+            vote_count: movie.vote_count,
+            popularity: movie.popularity,
+            genre_ids: movie.genre_ids,
+        });
+        console.log(response.data)
+
+
+        if (response.status === 201) {
+            setIsInWatchlist(true);
+        } else {
+            alert(response.data.error || 'Failed to add movie');
+        }
+    };
+
+    const handleRemoveFromWatchlist = async (e) => {
+
+        e.preventDefault();  
+        e.stopPropagation();
+        const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
+            movie_id: movie.id
+        });
+
+        console.log(response.data)
+
+
+        if (response.status === 200) {
+            setIsInWatchlist(false);
+        } else {
+            alert(response.data.error || 'Failed to remove movie');
+        }
+    };
+
+    const toggleWatchlist = (e) => {
+        if (isInWatchlist) {
+            handleRemoveFromWatchlist(e);
+        } else {
+            handleAddToWatchlist(e);
+        }
+    };
+
+    const watchlistLabel = isInWatchlist ? '-' : '+';
+
+
   return (
     <Link to={`/MovieDetail/${movie.id}`}  onMouseEnter={() => handleMouseEnter(movie.id)} onMouseLeave={()=>handleMouseLeave()} className={`group   ${hovered && movie.id===hoveredMovieId ? 'lg:hover:scale-x-[2] lg:hover:scale-y-[1.4] xl:hover:scale-x-[1.8] xl:hover:scale-y-[1.4]': ''}    bg-[#16181f] text-white  cursor-pointer lg:hover:z-[99] transition-transform duration-500 h-[170px] lg:h-[250px] lg:min-h-[250px] w-[110px] lg:w-[calc(100%/6-8px)] xl:w-[calc(100%/7-8px)] 2xl:w-[calc(100%/8-8px)] flex-shrink-0 rounded-[5px] ${index%6===0 && window.innerWidth<1280 ?'origin-left':''} ${index%7 === 0 && window.innerWidth<1536 ? "xl:origin-left" : ''} ${index%8 === 0 ? "2xl:origin-left" : ''} ${index%6  === 5 && index!==0 &&  window.innerWidth<1280 ? "lg:origin-right" : ''} ${index%7  === 6 && index!==0 &&  window.innerWidth<1536 ? "xl:origin-right" : ''} ${index%8  === 7 && index!==0 ? "2xl:origin-right" : ''}`} >
 
@@ -24,7 +110,9 @@ function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, hand
                     </button>
                 </div>
                 <button 
-                    className='lg:hover:scale-105 transition-all duration-300 text-[8px] h-[30px] w-[30px] flex justify-center items-center bg-[rgba(40,42,49,255)] rounded-[5px] text-white' >+
+                    onClick={e => toggleWatchlist(e)}
+                    disabled = {loading}
+                    className='lg:hover:scale-105 transition-all duration-300 text-[8px] h-[30px] w-[30px] flex justify-center items-center bg-[rgba(40,42,49,255)] rounded-[5px] text-white' >{watchlistLabel}
                 </button>
             </div>
             <p className='font-semibold text-[10px] text-[#d9d9da] py-1 ' >{movie.original_title}</p>

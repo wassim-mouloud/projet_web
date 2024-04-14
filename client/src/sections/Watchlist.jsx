@@ -2,7 +2,31 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import WatchlistCard from '../components/WatchlistCard'
 
-function Watchlist({watchlistMovies, watchlistSeries, allWatchlist, setAllWatchlist, getMovies, getSeries, hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) {
+function Watchlist({allWatchlist, setAllWatchlist, getMovies, getSeries, hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) {
+
+  const [watchlistSeries, setWatchlistSeries] = useState(null)
+
+  const fetchSeriesWatchlist = async () => {
+    try {
+        setLoading(true);
+        const response = await httpClient.get('//localhost:8000/watchlist/series');
+        if (response.status === 200) {
+            const watchlist = response.data;
+            const isSeriesInWatchlist = watchlist.some(watchlistSeries => watchlistSeries.series_id === movie.id);
+            setIsInWatchlist(isSeriesInWatchlist);
+        } else {
+            alert('Failed to fetch watchlist');
+        }
+    } catch (error) {
+        console.error('Error fetching watchlist', error);
+        alert('Error communicating with server');
+    } finally {
+        setLoading(false);
+    }
+};
+
+
+  useEffect(()=>console.log())
 
 
 
