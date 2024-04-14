@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { movie_genres,tv_genres } from '../utils/genres';
 
 
-const WatchlistCard = ({movie, index, getMovies, getSeries,  hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) => {
+const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) => {
 
 
   return (
