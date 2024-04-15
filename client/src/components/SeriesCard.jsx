@@ -18,7 +18,7 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
                 const response = await httpClient.get('//localhost:8000/watchlist/series');
                 if (response.status === 200) {
                     const watchlist = response.data;
-                    const isSeriesInWatchlist = watchlist.some(watchlistSeries => watchlistSeries.series_id === movie.id);
+                    const isSeriesInWatchlist = watchlist.some(watchlistSeries => watchlistSeries.id === movie.id);
                     setIsInWatchlist(isSeriesInWatchlist);
                 } else {
                     alert('Failed to fetch watchlist');
@@ -83,7 +83,7 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
         e.stopPropagation();
         
         const response = await httpClient.post('//localhost:8000/watchlist/series/remove', {
-            series_id: movie.id
+            id: movie.id
         });
 
         if (response.status === 200) {

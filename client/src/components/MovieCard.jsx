@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom';
 import httpClient from '../httpClient';
 import useAuth from '../hooks/useAuth';
+import { Toaster, toast } from "sonner";
+
 
 function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, handleMouseLeave, hovered, hoveredMovieId}) {
 
@@ -18,7 +20,7 @@ function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, hand
                 const response = await httpClient.get('//localhost:8000/watchlist/movies');
                 if (response.status === 200) {
                     const watchlist = response.data;
-                    const isMovieInWatchlist = watchlist.some(watchlistMovie => watchlistMovie.movie_id === movie.id);
+                    const isMovieInWatchlist = watchlist.some(watchlistMovie => watchlistMovie.id === movie.id);
                     setIsInWatchlist(isMovieInWatchlist);
                 } else {
                     alert('Failed to fetch watchlist');
@@ -69,11 +71,12 @@ function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, hand
 
             if (response.status === 201) {
                 setIsInWatchlist(true);
+                toast.success("Movie added to watchlist"); 
             } else {
                 alert(response.data.error || 'Failed to add movie');
             }
         } catch (error) {
-            console.error("Error adding movie to watchlist: ", error);
+            // console.error("Error adding movie to watchlist: ", error);
             alert("Failed to add movie to watchlist.");
         }
     };
@@ -83,14 +86,12 @@ function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, hand
         e.preventDefault();  
         e.stopPropagation();
         const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
-            movie_id: movie.id
+            id: movie.id
         });
-
-        console.log(response.data)
-
 
         if (response.status === 200) {
             setIsInWatchlist(false);
+            // toast.success(`${movie.original_title} removed from watchlist`);
         } else {
             alert(response.data.error || 'Failed to remove movie');
         }

@@ -12,7 +12,7 @@ const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter
     
         try {
             const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
-                movie_id: movie.id
+                id: movie.id
             });
     
             if (response.status === 200) {
@@ -31,7 +31,7 @@ const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter
         e.stopPropagation();
         
         const response = await httpClient.post('//localhost:8000/watchlist/series/remove', {
-            series_id: movie.id
+            id: movie.id
         });
 
         if (response.status === 200) {

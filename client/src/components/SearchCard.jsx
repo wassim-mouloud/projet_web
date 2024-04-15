@@ -15,25 +15,40 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
     useEffect(() => {
         const fetchWatchlist = async () => {
             try {
-                setLoading(true);
-                const response = await httpClient.get('//localhost:8000/watchlist/movies');
-                if (response.status === 200) {
-                    const watchlist = response.data;
-                    const isMovieInWatchlist = watchlist.some(watchlistMovie => watchlistMovie.movie_id === movie.id);
-                    setIsInWatchlist(isMovieInWatchlist);
+                setLoading(true); // Assuming setLoading controls a loading indicator
+    
+                // Fetch both movies and series watchlists simultaneously
+                const [moviesResponse, seriesResponse] = await Promise.all([
+                    httpClient.get('//localhost:8000/watchlist/movies'),
+                    httpClient.get('//localhost:8000/watchlist/series')
+                ]);
+    
+                // Check if responses are successful
+                if (moviesResponse.status === 200 && seriesResponse.status === 200) {
+                    const moviesWatchlist = moviesResponse.data;
+                    const seriesWatchlist = seriesResponse.data;
+    
+                    // Check if the movie is in the movie watchlist
+                    const isMovieInMoviesWatchlist = moviesWatchlist.some(watchlistMovie => watchlistMovie.id == movie.id);
+                    // Check if the movie is in the series watchlist
+                    const isMovieInSeriesWatchlist = seriesWatchlist.some(watchlistSeries => watchlistSeries.id == movie.id);
+                    console.log(`${movie.id} : ${isMovieInMoviesWatchlist}`)
+    
+                    // Update state based on whether the movie is in either list
+                    setIsInWatchlist(isMovieInMoviesWatchlist || isMovieInSeriesWatchlist);
+
                 } else {
                     alert('Failed to fetch watchlist');
                 }
             } catch (error) {
-                console.error('Error fetching watchlist', error);
+                console.error('Error fetching watchlists', error);
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchWatchlist();
     }, []);
-
 
     const handleAddMovieToWatchlist = async (e) => {
         e.preventDefault();  
@@ -82,13 +97,11 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         e.preventDefault();  
         e.stopPropagation();
 
-        // Display loading message or handle it differently based on your UI design
         if (isLoading) {
             alert("Checking user status...");
             return;
         }
 
-        // Check if the user is logged in
         if (!user) {
             alert("Please log in to add series to your watchlist.");
             return;
@@ -127,7 +140,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         e.preventDefault();  
         e.stopPropagation();
         const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
-            movie_id: movie.id
+            id: movie.id
         });
 
         if (response.status === 200) {
@@ -142,7 +155,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         e.stopPropagation();
         
         const response = await httpClient.post('//localhost:8000/watchlist/series/remove', {
-            series_id: movie.id
+            id: movie.id
         });
 
         if (response.status === 200) {
