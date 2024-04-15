@@ -55,7 +55,7 @@ function Watchlist({ hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave
     <div>
         <Navbar/>
         <p className='text-white  text-[20px] lg:text-[42px] text-center font-bold p-6 lg:p-8 lg:pl-[100px]' >My watchlist</p>
-        <p className='text-white  text-[20px] font-semibold  lg:pl-[100px]' >Series</p>
+        <p className='text-white  text-[20px] font-semibold pl-6 lg:pl-[100px]' >Series</p>
         <div  className='w-screen lg:w-[calc(100vw-100px)] xl:w-[calc(100vw-140px)] grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2  mb-[120px] lg:mb-0 p-6 lg:p-8 lg:pl-[100px]' >
             {watchlistSeries.map((movie, index)=>{
                 return(
@@ -63,7 +63,7 @@ function Watchlist({ hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave
                 )
             })}
         </div>
-        <p className='text-white  text-[20px] font-semibold  lg:pl-[100px]' >Movies</p>
+        <p className='text-white  text-[20px] font-semibold pl-6  lg:pl-[100px]' >Movies</p>
         <div  className='w-screen lg:w-[calc(100vw-100px)] xl:w-[calc(100vw-140px)] grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2  mb-[120px] lg:mb-0 p-6 lg:p-8 lg:pl-[100px]' >
             {watchlistMovies.map((movie, index)=>{
                 return(
