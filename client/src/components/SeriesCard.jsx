@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import httpClient from '../httpClient';
+import useAuth from '../hooks/useAuth';
+
 function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handleMouseLeave, isHovered, hoveredMovieId}) {
 
 
     const [isInWatchlist, setIsInWatchlist] = useState(false);
     const [loading, setLoading] = useState(true);
+    const { user, isLoading } = useAuth();
+
 
     useEffect(() => {
         const fetchWatchlist = async () => {
@@ -21,37 +25,56 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
                 }
             } catch (error) {
                 console.error('Error fetching watchlist', error);
-                alert('Error communicating with server');
             } finally {
                 setLoading(false);
             }
         };
 
         fetchWatchlist();
-    }, [movie.id]);
+    }, []);
+
 
     const handleAddToWatchlist = async (e) => {
         e.preventDefault();  
         e.stopPropagation();
 
-        const response = await httpClient.post('//localhost:8000/watchlist/series/add', {
-            id: movie.id,
-            name: movie.name,
-            overview: movie.overview,
-            poster_path: movie.poster_path,
-            backdrop_path: movie.backdrop_path,
-            original_language: movie.original_language,
-            first_air_date: movie.first_air_date,
-            vote_average: movie.vote_average,
-            vote_count: movie.vote_count,
-            popularity: movie.popularity,
-            genre_ids: movie.genre_ids,
-        });
+        // Display loading message or handle it differently based on your UI design
+        if (isLoading) {
+            alert("Checking user status...");
+            return;
+        }
 
-        if (response.status === 201) {
-            setIsInWatchlist(true);
-        } else {
-            alert(response.data.error || 'Failed to add series');
+        // Check if the user is logged in
+        if (!user) {
+            alert("Please log in to add series to your watchlist.");
+            return;
+        }
+
+        try {
+            const response = await httpClient.post('//localhost:8000/watchlist/series/add', {
+                id: movie.id,
+                name: movie.name,
+                overview: movie.overview,
+                poster_path: movie.poster_path,
+                backdrop_path: movie.backdrop_path,
+                original_language: movie.original_language,
+                first_air_date: movie.first_air_date,
+                vote_average: movie.vote_average,
+                vote_count: movie.vote_count,
+                popularity: movie.popularity,
+                genre_ids: movie.genre_ids,
+            }, { withCredentials: true });
+
+            console.log(response.data);
+
+            if (response.status === 201) {
+                setIsInWatchlist(true);
+            } else {
+                alert(response.data.error || 'Failed to add series');
+            }
+        } catch (error) {
+            console.error("Error adding series to watchlist: ", error);
+            alert("Failed to add series to watchlist.");
         }
     };
 

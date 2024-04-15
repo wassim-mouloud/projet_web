@@ -1,21 +1,61 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { movie_genres,tv_genres } from '../utils/genres';
+import httpClient from '../httpClient';
 
 
-const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) => {
+const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave,  setWatchlistSeries, setWatchlistMovies}) => {
+
+    const handleRemoveMovieFromWatchlist = async (e) => {
+
+        e.preventDefault();  
+        e.stopPropagation();
+        const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
+            movie_id: movie.id
+        });
+
+
+
+        if (response.status === 200) {
+            console.log("removed")
+            setWatchlistMovies(prevMovies => prevMovies.filter(m => m.id !== movie.id));
+        } else {
+            alert(response.data.error || 'Failed to remove movie');
+        }
+    };
+
+    const handleRemoveSeriesFromWatchlist = async (e) => {
+        e.preventDefault();  
+        e.stopPropagation();
+        
+        const response = await httpClient.post('//localhost:8000/watchlist/series/remove', {
+            series_id: movie.id
+        });
+
+        if (response.status === 200) {
+            console.log("removed")
+            setWatchlistSeries(prevSeries => prevSeries.filter(m => m.id !== movie.id));
+
+        } else {
+            alert(response.data.error || 'Failed to remove series');
+        }
+    };
+
+    const handleRemove = (e) => {
+        "release_date" in movie ?  handleRemoveMovieFromWatchlist(e) : handleRemoveSeriesFromWatchlist(e)
+    }
 
 
   return (
         <Link
-            to={`${'release_date' in movie ?`/MovieDetail/${movie.movie_id}`:`/SeriesDetail/${movie.series_id}`}`}
+            to={`${'release_date' in movie ?`/MovieDetail/${movie.id}`:`/SeriesDetail/${movie.id}`}`}
             key={index}
             layout
             className={`group relative fade h-[220px] md:h-[220px] lg:h-[245px]  rounded-[7px] bg-[#16181f] cursor-pointer transition-transform duration-500 ${hovered && movie.id===hoveredMovieId?'lg:hover:scale-x-[1.7] lg:hover:scale-y-[1.4] lg:hover:z-[99]':''} ${index%6===0?'lg:origin-left':''} ${index%6===5 && index!==0? 'lg:origin-right':''} `}
             onMouseEnter={()=>handleMouseEnter(movie.id)}
             onMouseLeave={handleMouseLeave}>
-            <img loading='lazy' src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt="" className={`skeleton rounded-[5px] h-full w-full ${hovered && movie.id===hoveredMovieId?'lg:hidden':''}    `}/>
+            <img loading='lazy' src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt="" className={`skeleton rounded-[5px] h-full w-full ${hovered && movie.id===hoveredMovieId?'lg:hidden':''} `}/>
             <img loading='lazy' src={`https://image.tmdb.org/t/p/w780${movie.backdrop_path}`} alt="" className={`skeleton w-full object-cover rounded-[5px] h-[40%] absolute top-0 opacity-0 ${hovered && movie.id===hoveredMovieId?'lg:group-hover:opacity-100   lg:flex ':''} `}/>
             
             <div className={`lg:mt-[50%] flex-col items-start justify-between h-[calc(60%-16px)] hidden w-full py-2 px-2 mt-1 ${hovered && movie.id===hoveredMovieId?'lg:group-hover:flex':''}`} >
@@ -30,7 +70,7 @@ const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter
                         <img loading='lazy' src="/images/dark-blue-play.png" alt="" className='w-2 h-2'/>
                         <span className='font-medium text-[#16181f]' >Watch Now</span>
                     </button>
-                    <button  className='text-[8px] h-[30px] w-[30px] flex justify-center items-center bg-[rgba(40,42,49,255)] rounded-[5px] text-white lg:hover:scale-105 transition-all ' >-</button>
+                    <button onClick={(e) => handleRemove(e)}  className='text-[8px] h-[30px] w-[30px] flex justify-center items-center bg-[rgba(40,42,49,255)] rounded-[5px] text-white lg:hover:scale-105 transition-all ' >-</button>
                 </div>
                 <p className='font-bold text-[10px] text-[#d9d9da] py-1' >{'release_date' in movie ? movie.original_title : movie.name}</p>
                 <div className='w-[95%] flex flex-col gap-1' >

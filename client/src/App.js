@@ -12,9 +12,6 @@ import Watchlist from './sections/Watchlist';
 import Register from './sections/Register';
 function App() {
 
-  const [watchlistMovies, setWatchlistMovies] = useState([])
-  const [watchlistSeries, setWatchlistSeries] = useState([])
-  const [allWatchlist, setAllWatchlist] = useState([])
   const [hovered, setHovered]= useState(false)
   const [hoveredMovieId, setHoveredMovieId] = useState(null);
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -44,7 +41,7 @@ function App() {
         <Route path='/Register' element={<Register/>}></Route>
         <Route path='MovieDetail/:id' element={<MovieDetail hovered={hovered} hoveredMovieId={hoveredMovieId} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave}/>}></Route>
         <Route path='SeriesDetail/:id' element={<SeriesDetail/>}></Route>
-        <Route path='/Watchlist' element={<Watchlist watchlistMovies={watchlistMovies} setWatchlistMovies={setWatchlistMovies} watchlistSeries={watchlistSeries} setWatchlistSeries={setWatchlistSeries} allWatchlist={allWatchlist} setAllWatchlist={setAllWatchlist}  hovered={hovered} hoveredMovieId={hoveredMovieId}  handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />}></Route>        
+        <Route path='/Watchlist' element={<Watchlist  hovered={hovered} hoveredMovieId={hoveredMovieId}  handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />}></Route>        
       </Routes>
     </div>
   );

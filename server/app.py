@@ -185,7 +185,7 @@ def get_watchlist_movies():
 
     movies = WatchlistMovie.query.filter_by(user_id=user_id).all()
     movies_list = [{
-        "movie_id": movie.movie_id,
+        "id": movie.movie_id,
         "title": movie.title,
         "overview": movie.overview,
         "poster_path": movie.poster_path,
@@ -209,7 +209,7 @@ def get_watchlist_series():
 
     series = WatchlistSeries.query.filter_by(user_id=user_id).all()
     series_list = [{
-        "series_id": series.series_id,
+        "id": series.series_id,
         "name": series.name,
         "overview": series.overview,
         "poster_path": series.poster_path,

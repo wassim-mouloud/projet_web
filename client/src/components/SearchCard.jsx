@@ -2,8 +2,110 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { movie_genres,tv_genres } from '../utils/genres';
+import httpClient from '../httpClient';
+import useAuth from '../hooks/useAuth';
 
 function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHoveredMovieId, handleMouseEnter, handleMouseLeave}) {
+
+    const [isInWatchlist, setIsInWatchlist] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const { user, isLoading } = useAuth();
+
+
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            try {
+                setLoading(true);
+                const response = await httpClient.get('//localhost:8000/watchlist/movies');
+                if (response.status === 200) {
+                    const watchlist = response.data;
+                    const isMovieInWatchlist = watchlist.some(watchlistMovie => watchlistMovie.movie_id === movie.id);
+                    setIsInWatchlist(isMovieInWatchlist);
+                } else {
+                    alert('Failed to fetch watchlist');
+                }
+            } catch (error) {
+                console.error('Error fetching watchlist', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchWatchlist();
+    }, []);
+
+
+    const handleAddToWatchlist = async (e) => {
+        e.preventDefault();  
+        e.stopPropagation();
+
+        // Check if user information is still loading
+        if (isLoading) {
+            alert("Checking user status...");
+            return;
+        }
+
+        // Ensure the user is logged in
+        if (!user) {
+            alert("Please log in to add movies to your watchlist.");
+            return;
+        }
+
+        try {
+            const response = await httpClient.post('//localhost:8000/watchlist/movies/add', {
+                id: movie.id,
+                title: movie.title,
+                overview: movie.overview,
+                poster_path: movie.poster_path,
+                backdrop_path: movie.backdrop_path,
+                original_language: movie.original_language,
+                release_date: movie.release_date,
+                vote_average: movie.vote_average,
+                vote_count: movie.vote_count,
+                popularity: movie.popularity,
+                genre_ids: movie.genre_ids,
+            }, { withCredentials: true });
+
+            console.log(response.data);
+
+            if (response.status === 201) {
+                setIsInWatchlist(true);
+            } else {
+                alert(response.data.error || 'Failed to add movie');
+            }
+        } catch (error) {
+            console.error("Error adding movie to watchlist: ", error);
+            alert("Failed to add movie to watchlist.");
+        }
+    };
+
+    const handleRemoveFromWatchlist = async (e) => {
+
+        e.preventDefault();  
+        e.stopPropagation();
+        const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
+            movie_id: movie.id
+        });
+
+        console.log(response.data)
+
+
+        if (response.status === 200) {
+            setIsInWatchlist(false);
+        } else {
+            alert(response.data.error || 'Failed to remove movie');
+        }
+    };
+
+    const toggleWatchlist = (e) => {
+        if (isInWatchlist) {
+            handleRemoveFromWatchlist(e);
+        } else {
+            handleAddToWatchlist(e);
+        }
+    };
+
+    const watchlistLabel = isInWatchlist ? '-' : '+';
       
 
   return (
@@ -28,7 +130,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
                     <img loading='lazy' src="/images/dark-blue-play.png" alt="" className='w-2 h-2'/>
                     <span className='font-medium text-[#16181f]' >Watch Now</span>
                 </button>
-                <button  className='text-[8px] h-[30px] w-[30px] flex justify-center items-center bg-[rgba(40,42,49,255)] rounded-[5px] text-white lg:hover:scale-105 transition-all ' >+</button>
+                <button onClick={(e) => toggleWatchlist(e)} className='text-[8px] h-[30px] w-[30px] flex justify-center items-center bg-[rgba(40,42,49,255)] rounded-[5px] text-white lg:hover:scale-105 transition-all ' >{watchlistLabel}</button>
             </div>
             <p className='font-bold text-[10px] text-[#d9d9da] py-1' >{'release_date' in movie ? movie.original_title : movie.name}</p>
             <div className='w-[95%] flex flex-col gap-1' >
