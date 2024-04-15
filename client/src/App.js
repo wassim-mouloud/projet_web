@@ -1,15 +1,15 @@
 import {Route, Routes} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './App.css';
-import Home from './sections/Home';
-import Movies from './sections/Movies'
-import Series from './sections/Series';
-import Search from './sections/Search';
-import MovieDetail from './sections/MovieDetail';
-import SeriesDetail from './sections/SeriesDetail';
-import Login from './sections/Login';
-import Watchlist from './sections/Watchlist';
-import Register from './sections/Register';
+import Home from './pages/Home';
+import Movies from './pages/Movies'
+import Series from './pages/Series';
+import Search from './pages/Search';
+import MovieDetail from './pages/MovieDetail';
+import SeriesDetail from './pages/SeriesDetail';
+import Login from './pages/Login';
+import Watchlist from './pages/Watchlist';
+import Register from './pages/Register';
 function App() {
 
   const [hovered, setHovered]= useState(false)

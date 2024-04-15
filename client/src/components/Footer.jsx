@@ -4,7 +4,7 @@ function Footer() {
   return (
     <div className='w-screen ml-[100px] h-[200px] hidden lg:flex items-center mt-[50px] ' >
       <div className=' w-[calc(100%-100px)] flex justify-between pr-8' >
-        <div className='flex flex-col gap-4 ' >
+        {/* <div className='flex flex-col gap-4 ' >
           <p className='text-[#e1e6f0]' >Company</p>
           <div className='flex flex-col gap-1 text-[#8f98b2] text-[14px]' >
             <p>Supported Devices</p>
@@ -26,7 +26,7 @@ function Footer() {
             <p>Help</p>
             <p>Feedback</p>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-4">
           <p className='text-[#e1e6f0]' >Connect with Us</p>

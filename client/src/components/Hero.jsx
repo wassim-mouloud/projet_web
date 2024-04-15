@@ -223,11 +223,11 @@ function Hero({ frontMovies }) {
                                     </button>
                                 </a>
 
-                                <button 
+                                {/* <button 
                                     className='w-[50px] lg:w-[60px] h-[50px] lg:h-[55px] rounded-[10px] text-[18px]  bg-[rgba(255,255,255,0.1)] lg:hover:bg-[rgba(255,255,255,0.4)] lg:hover:scale-105 transition-all duration-300 p-5 flex justify-center items-center'
                                 >
                                     +
-                                </button>
+                                </button> */}
                             </div>
                         </div>
 
