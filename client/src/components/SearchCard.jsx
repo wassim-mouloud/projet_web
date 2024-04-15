@@ -35,7 +35,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
     }, []);
 
 
-    const handleAddToWatchlist = async (e) => {
+    const handleAddMovieToWatchlist = async (e) => {
         e.preventDefault();  
         e.stopPropagation();
 
@@ -66,7 +66,6 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
                 genre_ids: movie.genre_ids,
             }, { withCredentials: true });
 
-            console.log(response.data);
 
             if (response.status === 201) {
                 setIsInWatchlist(true);
@@ -79,16 +78,57 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         }
     };
 
-    const handleRemoveFromWatchlist = async (e) => {
+    const handleAddSeriesToWatchlist = async (e) => {
+        e.preventDefault();  
+        e.stopPropagation();
+
+        // Display loading message or handle it differently based on your UI design
+        if (isLoading) {
+            alert("Checking user status...");
+            return;
+        }
+
+        // Check if the user is logged in
+        if (!user) {
+            alert("Please log in to add series to your watchlist.");
+            return;
+        }
+
+        try {
+            const response = await httpClient.post('//localhost:8000/watchlist/series/add', {
+                id: movie.id,
+                name: movie.name,
+                overview: movie.overview,
+                poster_path: movie.poster_path,
+                backdrop_path: movie.backdrop_path,
+                original_language: movie.original_language,
+                first_air_date: movie.first_air_date,
+                vote_average: movie.vote_average,
+                vote_count: movie.vote_count,
+                popularity: movie.popularity,
+                genre_ids: movie.genre_ids,
+            }, { withCredentials: true });
+
+            console.log(response.data);
+
+            if (response.status === 201) {
+                setIsInWatchlist(true);
+            } else {
+                alert(response.data.error || 'Failed to add series');
+            }
+        } catch (error) {
+            console.error("Error adding series to watchlist: ", error);
+            alert("Failed to add series to watchlist.");
+        }
+    };
+
+    const handleRemoveMovieFromWatchlist = async (e) => {
 
         e.preventDefault();  
         e.stopPropagation();
         const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
             movie_id: movie.id
         });
-
-        console.log(response.data)
-
 
         if (response.status === 200) {
             setIsInWatchlist(false);
@@ -97,11 +137,26 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         }
     };
 
+    const handleRemoveSeriesFromWatchlist = async (e) => {
+        e.preventDefault();  
+        e.stopPropagation();
+        
+        const response = await httpClient.post('//localhost:8000/watchlist/series/remove', {
+            series_id: movie.id
+        });
+
+        if (response.status === 200) {
+            setIsInWatchlist(false);
+        } else {
+            alert(response.data.error || 'Failed to remove series');
+        }
+    };
+
     const toggleWatchlist = (e) => {
         if (isInWatchlist) {
-            handleRemoveFromWatchlist(e);
+            'release_date' in movie ?  handleRemoveMovieFromWatchlist(e) : handleRemoveSeriesFromWatchlist(e)
         } else {
-            handleAddToWatchlist(e);
+            'release_date' in movie ?  handleAddMovieToWatchlist(e) : handleAddSeriesToWatchlist(e)
         }
     };
 

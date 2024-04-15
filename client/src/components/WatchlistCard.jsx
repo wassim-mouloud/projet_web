@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
+import React from 'react'
 import { Link } from 'react-router-dom';
 import { movie_genres,tv_genres } from '../utils/genres';
 import httpClient from '../httpClient';
@@ -8,20 +7,22 @@ import httpClient from '../httpClient';
 const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave,  setWatchlistSeries, setWatchlistMovies}) => {
 
     const handleRemoveMovieFromWatchlist = async (e) => {
-
         e.preventDefault();  
         e.stopPropagation();
-        const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
-            movie_id: movie.id
-        });
-
-
-
-        if (response.status === 200) {
-            console.log("removed")
-            setWatchlistMovies(prevMovies => prevMovies.filter(m => m.id !== movie.id));
-        } else {
-            alert(response.data.error || 'Failed to remove movie');
+    
+        try {
+            const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
+                movie_id: movie.id
+            });
+    
+            if (response.status === 200) {
+                console.log("Removed");
+                setWatchlistMovies(prevMovies => prevMovies.filter(m => m.id !== movie.id));
+            } else {
+                console.error("Failed to remove movie: ", response.data.error);
+            }
+        } catch (error) {
+            console.error("Error removing movie: ", error);
         }
     };
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import httpClient from '../httpClient'
 import { Link } from 'react-router-dom'
+import {Toaster, toast} from "sonner"
 
 function Register() {
 
@@ -13,27 +14,33 @@ function Register() {
     }
 
     const registerUser = async () => {
-
-        if (!isValidEmail(email)) {
-            console.error('Invalid email format');
-            return; 
-        }
-        
-        try {
+      if (!isValidEmail(email)) {
+          console.error('Invalid email format');
+          toast.error("Invalid email format. Please enter a correct email.");
+          return; 
+      }
+      
+      try {
           const resp = await httpClient.post("//localhost:8000/register", { email, password, username });
           window.location.href = "/";  
-        } catch (error) {
+          toast.success("Registration successful! Welcome aboard."); 
+      } catch (error) {
           if (error.response) {
-            if (error.response.status === 409) {
-              console.error('Registration failed: User already exists');
-            } else {
-              console.error('An unexpected error occurred:', error.response.data);
-            }
+              switch (error.response.status) {
+                  case 409:
+                      console.error('Registration failed: User already exists');
+                      toast.error("Registration failed: User already exists."); 
+                      break;
+                  default:
+                      console.error('An unexpected error occurred:', error.response.data);
+                      toast.error("An unexpected error occurred. Please try again later."); 
+              }
           } else {
-            console.error('An unexpected error occurred:', error.message);
+              console.error('An unexpected error occurred:', error.message);
+              toast.error("Network error or no server response. Please check your connection and try again."); 
           }
-        }
-      };
+      }
+  };
       
 
 
@@ -55,6 +62,7 @@ function Register() {
                     <p>Login with Google</p>
                 </button> */}
         </form>
+        <Toaster richColors />
     </div>
   )
 }

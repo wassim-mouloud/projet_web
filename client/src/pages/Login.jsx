@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import httpClient from '../httpClient'
+import { Toaster, toast } from "sonner";
+
 
 function Login() {
 
@@ -8,23 +10,32 @@ function Login() {
     const [password, setPassword] = useState('')
 
     const loginUser = async () => {
-    
       try {
-        const resp = await httpClient.post("//localhost:8000/login", { email, password });
-        console.log(resp.data)
-        window.location.href = "/"
+          const resp = await httpClient.post("//localhost:8000/login", { email, password });
+          console.log(resp.data);
+          window.location.href = "/"; 
+          toast.success("Login successful!"); 
       } catch (error) {
-        if (error.response) {
-          if (error.response.status === 403) {
-            console.error('Login failed: Invalid credentials');
-          } else if (error.response.status === 404) {
-            console.error('Login failed: User not found');
+          if (error.response) {
+              switch (error.response.status) {
+                  case 403:
+                      console.error('Login failed: Invalid credentials');
+                      toast.error("Invalid credentials. Please try again."); 
+                      break;
+                  case 404:
+                      console.error('Login failed: User not found');
+                      toast.error("User not found. Please check your details and try again."); 
+                      break;
+                  default:
+                      console.error('An unexpected error occurred:', error.response.data);
+                      toast.error("An unexpected error occurred. Please try again later."); 
+              }
           } else {
-            console.error('An unexpected error occurred:', error.response.data);
+              console.error('Network error or no response:', error);
+              toast.error("Network error or no server response. Please check your connection and try again."); 
           }
-        } 
       }
-    };
+  };
     
 
 
@@ -45,6 +56,7 @@ function Login() {
           <p className='text-white' >Don't have an account ?</p>
           <Link to="/Register" ><p className='text-[#0072d2] font-semibold hover:underline underline-offset-2' >Sign up</p></Link>
         </div>
+        <Toaster richColors />
     </div>
   )
 }
