@@ -146,7 +146,7 @@ def remove_movie_from_watchlist():
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
 
-    movie_id = request.json.get("movie_id")
+    movie_id = request.json.get("id")
     if not movie_id:
         return jsonify({"error": "Movie ID is required"}), 400
 
@@ -164,7 +164,7 @@ def remove_series_from_watchlist():
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
 
-    series_id = request.json.get("series_id")
+    series_id = request.json.get("id")
     if not series_id:
         return jsonify({"error": "Series ID is required"}), 400
 
