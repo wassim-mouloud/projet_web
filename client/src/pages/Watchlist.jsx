@@ -52,7 +52,7 @@ function Watchlist({ hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave
 
 
   return (
-    <div>
+    <div className='lg:pb-14' >
         <Navbar/>
         <p className='text-white  text-[20px] lg:text-[42px] text-center font-bold p-6 lg:p-8 lg:pl-[100px]' >My watchlist</p>
         <p className='text-white  text-[20px] font-semibold pl-6 lg:pl-[100px]' >Series</p>
