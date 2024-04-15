@@ -13,13 +13,13 @@ function Navbar() {
         window.location.href = "/";
     };
 
-    const links = ['Home', 'Search', 'Movies', 'Series', 'Watchlist'];
+    const links = ['Home', 'Search', 'Movies', 'Series'];
     if (user) {
+        links.push('Watchlist');  
         links.push('Logout');  
     } else {
         links.push('Login');   
     }
-
     return (
         <div className='group w-screen lg:hover:w-[200px] lg:w-[80px] h-[85px] lg:h-screen fixed bottom-0 lg:top-0 lg:left-0 z-[99] bg-[#0f1013] lg:bg-transparent transition-[width] duration-500' style={{ backgroundImage: `linear-gradient(to right, #0f1013 , transparent)` }}>
             <div className='w-full h-[0.5px] lg:hidden bg-[#94a3b8]' />
