@@ -55,6 +55,7 @@ function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, hand
         try {
             const response = await httpClient.post('//localhost:8000/watchlist/movies/add', {
                 id: movie.id,
+                original_title : movie.original_title,
                 title: movie.title,
                 overview: movie.overview,
                 poster_path: movie.poster_path,
@@ -71,7 +72,7 @@ function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, hand
 
             if (response.status === 201) {
                 setIsInWatchlist(true);
-                toast.success("Movie added to watchlist"); 
+                toast.success(`${movie.original_title} added to watchlist`); 
             } else {
                 alert(response.data.error || 'Failed to add movie');
             }
@@ -91,7 +92,7 @@ function MovieCard({movie, index, trailers, movie_genres, handleMouseEnter, hand
 
         if (response.status === 200) {
             setIsInWatchlist(false);
-            // toast.success(`${movie.original_title} removed from watchlist`);
+            toast.success(`${movie.original_title} removed from watchlist`);
         } else {
             alert(response.data.error || 'Failed to remove movie');
         }

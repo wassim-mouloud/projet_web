@@ -3,9 +3,10 @@ import Footer from '../components/Footer'
 import Navbar from '../components/Navbar';
 import SearchCard from '../components/SearchCard'
 import '../App.css'
+import { Toaster } from 'sonner';
 
 
-function Search({watchlistMovies, watchlistSeries , getWatchlistMovies, getWatchlistSeries, addMovieToWatchlist, addSeriesToWatchlist, hovered, setHovered, hoveredMovieId, setHoveredMovieId, handleMouseEnter, handleMouseLeave }) {
+function Search({ hovered, setHovered, hoveredMovieId, setHoveredMovieId, handleMouseEnter, handleMouseLeave }) {
     
     const [popular, setPopular]= useState([]);
     const [content, setContent]= useState([]);
@@ -59,6 +60,7 @@ function Search({watchlistMovies, watchlistSeries , getWatchlistMovies, getWatch
 
     return (
         <div className='relative'>
+            <Toaster richColors />
             <Navbar/>
             <div className='flex flex-col items-center w-screen' >
                 <div className='w-[90%] lg:w-[calc(100%-100px)] xl:w-[calc(100%-200px)] h-[55px] lg:h-[65px] overflow-y-hidden flex items-center gap-2 bg-[#262833] mt-5  rounded-[7px]  p-4 my-4 ' >
@@ -68,7 +70,7 @@ function Search({watchlistMovies, watchlistSeries , getWatchlistMovies, getWatch
                 <div  className='w-[90%] lg:w-[calc(100%-100px)] xl:w-[calc(100%-200px)] grid grid-cols-2 sm:grid-cols-3  md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2  mb-[120px] lg:mb-0  ' >
                     {content.map((content, index) => 
                         content.poster_path ? (
-                            <SearchCard movie={content} index={index}  watchlistMovies={watchlistMovies} watchlistSeries={watchlistSeries} getMovies={getWatchlistMovies} getSeries={getWatchlistSeries} addMovieToWatchlist={addMovieToWatchlist} addSeriesToWatchlist={addSeriesToWatchlist} hovered={hovered} setHovered={setHovered} hoveredMovieId={hoveredMovieId} setHoveredMovieId={setHoveredMovieId} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />
+                            <SearchCard movie={content} index={index}  hovered={hovered} setHovered={setHovered} hoveredMovieId={hoveredMovieId} setHoveredMovieId={setHoveredMovieId} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} />
                         ) : null
                     )}
                 </div>

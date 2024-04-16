@@ -17,7 +17,7 @@ function Home({hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) {
   return (
     <div className='z-[90] relative' >
       <Navbar/>
-      {/* <Toaster richColors /> */}
+      <Toaster richColors />
       <Hero frontMovies={frontMovies} />
       <GenreSlider hovered={hovered} hoveredMovieId={hoveredMovieId} handleMouseEnter={handleMouseEnter} handleMouseLeave={handleMouseLeave} title='Popular Movies' url1='https://api.themoviedb.org/3/movie/popular?language=en-US&page=1' url2='https://api.themoviedb.org/3/movie/popular?language=en-US&page=2' />
       <SeriesGenreSlider title='Popular Series' url1='https://api.themoviedb.org/3/trending/tv/day?language=en-US' url2='https://api.themoviedb.org/3/trending/tv/day?language=en-US'/>

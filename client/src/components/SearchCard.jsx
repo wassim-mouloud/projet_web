@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { movie_genres,tv_genres } from '../utils/genres';
 import httpClient from '../httpClient';
 import useAuth from '../hooks/useAuth';
+import { Toaster, toast } from "sonner";
+
 
 function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHoveredMovieId, handleMouseEnter, handleMouseLeave}) {
 
@@ -15,27 +17,22 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
     useEffect(() => {
         const fetchWatchlist = async () => {
             try {
-                setLoading(true); // Assuming setLoading controls a loading indicator
+                setLoading(true); 
     
-                // Fetch both movies and series watchlists simultaneously
                 const [moviesResponse, seriesResponse] = await Promise.all([
                     httpClient.get('//localhost:8000/watchlist/movies'),
                     httpClient.get('//localhost:8000/watchlist/series')
                 ]);
     
-                // Check if responses are successful
                 if (moviesResponse.status === 200 && seriesResponse.status === 200) {
                     const moviesWatchlist = moviesResponse.data;
                     const seriesWatchlist = seriesResponse.data;
     
-                    // Check if the movie is in the movie watchlist
                     const isMovieInMoviesWatchlist = moviesWatchlist.some(watchlistMovie => watchlistMovie.id == movie.id);
-                    // Check if the movie is in the series watchlist
                     const isMovieInSeriesWatchlist = seriesWatchlist.some(watchlistSeries => watchlistSeries.id == movie.id);
-                    console.log(`${movie.id} : ${isMovieInMoviesWatchlist}`)
     
-                    // Update state based on whether the movie is in either list
                     setIsInWatchlist(isMovieInMoviesWatchlist || isMovieInSeriesWatchlist);
+                    console.log(`${movie.id} ${movie.name} : ${isMovieInSeriesWatchlist}`)
 
                 } else {
                     alert('Failed to fetch watchlist');
@@ -48,19 +45,17 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         };
     
         fetchWatchlist();
-    }, []);
+    }, [movie]);
 
     const handleAddMovieToWatchlist = async (e) => {
         e.preventDefault();  
         e.stopPropagation();
 
-        // Check if user information is still loading
         if (isLoading) {
             alert("Checking user status...");
             return;
         }
 
-        // Ensure the user is logged in
         if (!user) {
             alert("Please log in to add movies to your watchlist.");
             return;
@@ -69,7 +64,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         try {
             const response = await httpClient.post('//localhost:8000/watchlist/movies/add', {
                 id: movie.id,
-                title: movie.title,
+                original_title : movie.original_title,
                 overview: movie.overview,
                 poster_path: movie.poster_path,
                 backdrop_path: movie.backdrop_path,
@@ -84,6 +79,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
 
             if (response.status === 201) {
                 setIsInWatchlist(true);
+                toast.success(`${movie.original_title} added to watchlist`); 
             } else {
                 alert(response.data.error || 'Failed to add movie');
             }
@@ -122,10 +118,11 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
                 genre_ids: movie.genre_ids,
             }, { withCredentials: true });
 
-            console.log(response.data);
 
             if (response.status === 201) {
                 setIsInWatchlist(true);
+                toast.success(`${movie.name} added to watchlist`); 
+
             } else {
                 alert(response.data.error || 'Failed to add series');
             }
@@ -145,6 +142,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
 
         if (response.status === 200) {
             setIsInWatchlist(false);
+            toast.success(`${movie.original_title} added to watchlist`); 
         } else {
             alert(response.data.error || 'Failed to remove movie');
         }
@@ -160,6 +158,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
 
         if (response.status === 200) {
             setIsInWatchlist(false);
+            toast.success(`${movie.name} removed from watchlist`); 
         } else {
             alert(response.data.error || 'Failed to remove series');
         }
@@ -181,7 +180,7 @@ function SearchCard({movie, index, hovered, setHovered, hoveredMovieId, setHover
         to={`${'release_date' in movie ?`/MovieDetail/${movie.id}`:`/SeriesDetail/${movie.id}`}`}
         key={index}
         layout
-        className={`group relative fade h-[220px] md:h-[220px] lg:h-[245px]  rounded-[7px] bg-[#16181f] cursor-pointer transition-transform duration-500 ${hovered && movie.id===hoveredMovieId?'lg:hover:scale-x-[1.7] lg:hover:scale-y-[1.4] lg:hover:z-[99]':''} ${index%6===0?'lg:origin-left':''} ${index%6===5 && index!==0? 'lg:origin-right':''} `}
+        className={`group relative fade h-[220px] md:h-[220px] lg:h-[245px]  rounded-[7px] bg-[#16181f] cursor-pointer transition-transform duration-500 ${hovered && movie.id===hoveredMovieId?'lg:hover:scale-x-[1.7] lg:hover:scale-y-[1.4] lg:hover:z-[99]':''} ${index%6 ==0  ?'lg:origin-left':''} ${index%6===5 && index!==0? 'lg:origin-right':''} `}
         onMouseEnter={()=>handleMouseEnter(movie.id)}
         onMouseLeave={handleMouseLeave}>
         <img loading='lazy' src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt="" className={`skeleton rounded-[5px] h-full w-full ${hovered && movie.id===hoveredMovieId?'lg:hidden':''}    `}/>

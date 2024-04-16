@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import httpClient from '../httpClient';
 import useAuth from '../hooks/useAuth';
+import { Toaster, toast } from "sonner";
+
 
 function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handleMouseLeave, isHovered, hoveredMovieId}) {
 
@@ -69,6 +71,8 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
 
             if (response.status === 201) {
                 setIsInWatchlist(true);
+                toast.success(`${movie.name} added to watchlist`); 
+
             } else {
                 alert(response.data.error || 'Failed to add series');
             }
@@ -88,6 +92,8 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
 
         if (response.status === 200) {
             setIsInWatchlist(false);
+            toast.success(`${movie.name} removed from watchlist`); 
+
         } else {
             alert(response.data.error || 'Failed to remove series');
         }

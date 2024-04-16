@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import WatchlistCard from '../components/WatchlistCard'
 import httpClient from '../httpClient';
+import { Toaster, toast } from "sonner";
+
 
 function Watchlist({ hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave}) {
 
@@ -71,6 +73,7 @@ function Watchlist({ hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave
                 )
             })}
         </div>
+        <Toaster richColors />
     </div>
   )
 }

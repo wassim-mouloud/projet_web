@@ -98,7 +98,7 @@ def add_movie_to_watchlist():
     new_movie = WatchlistMovie(
         user_id=user_id,
         movie_id=movie_data.get("id"),
-        title=movie_data.get("title"),
+        original_title=movie_data.get("original_title"),
         overview=movie_data.get("overview"),
         poster_path=movie_data.get("poster_path"),
         backdrop_path=movie_data.get("backdrop_path", ""),
@@ -186,7 +186,7 @@ def get_watchlist_movies():
     movies = WatchlistMovie.query.filter_by(user_id=user_id).all()
     movies_list = [{
         "id": movie.movie_id,
-        "title": movie.title,
+        "original_title": movie.original_title,
         "overview": movie.overview,
         "poster_path": movie.poster_path,
         "backdrop_path": movie.backdrop_path,

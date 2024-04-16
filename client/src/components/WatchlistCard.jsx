@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { movie_genres,tv_genres } from '../utils/genres';
 import httpClient from '../httpClient';
+import { Toaster, toast } from "sonner";
+
 
 
 const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave,  setWatchlistSeries, setWatchlistMovies}) => {
@@ -18,6 +20,7 @@ const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter
             if (response.status === 200) {
                 console.log("Removed");
                 setWatchlistMovies(prevMovies => prevMovies.filter(m => m.id !== movie.id));
+                toast.success(`${movie?.original_title} removed from watchlist`); 
             } else {
                 console.error("Failed to remove movie: ", response.data.error);
             }
@@ -37,7 +40,7 @@ const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter
         if (response.status === 200) {
             console.log("removed")
             setWatchlistSeries(prevSeries => prevSeries.filter(m => m.id !== movie.id));
-
+            toast.success(`${movie.name} removed from watchlist`); 
         } else {
             alert(response.data.error || 'Failed to remove series');
         }
