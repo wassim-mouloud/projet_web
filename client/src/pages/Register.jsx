@@ -21,7 +21,7 @@ function Register() {
       }
       
       try {
-          const resp = await httpClient.post("//localhost:8000/register", { email, password, username });
+          const resp = await httpClient.post("https://disneyflask.onrender.com/register", { email, password, username });
           window.location.href = "/";  
           toast.success("Registration successful! Welcome aboard."); 
       } catch (error) {
