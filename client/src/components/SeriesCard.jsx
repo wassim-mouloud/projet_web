@@ -17,7 +17,7 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
         const fetchWatchlist = async () => {
             try {
                 setLoading(true);
-                const response = await httpClient.get('//localhost:8000/watchlist/series');
+                const response = await httpClient.get('https://disneyflask.onrender.com/watchlist/series');
                 if (response.status === 200) {
                     const watchlist = response.data;
                     const isSeriesInWatchlist = watchlist.some(watchlistSeries => watchlistSeries.id === movie.id);
@@ -53,7 +53,7 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
         }
 
         try {
-            const response = await httpClient.post('//localhost:8000/watchlist/series/add', {
+            const response = await httpClient.post('https://disneyflask.onrender.com/watchlist/series/add', {
                 id: movie.id,
                 name: movie.name,
                 overview: movie.overview,
@@ -86,7 +86,7 @@ function SeriesCard({movie, index, trailers, tv_genres, handleMouseEnter, handle
         e.preventDefault();  
         e.stopPropagation();
         
-        const response = await httpClient.post('//localhost:8000/watchlist/series/remove', {
+        const response = await httpClient.post('https://disneyflask.onrender.com/watchlist/series/remove', {
             id: movie.id
         });
 

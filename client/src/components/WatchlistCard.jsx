@@ -13,7 +13,7 @@ const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter
         e.stopPropagation();
     
         try {
-            const response = await httpClient.post('//localhost:8000/watchlist/movies/remove', {
+            const response = await httpClient.post('https://disneyflask.onrender.com/watchlist/movies/remove', {
                 id: movie.id
             });
     
@@ -33,7 +33,7 @@ const WatchlistCard = ({movie, index,  hovered, hoveredMovieId, handleMouseEnter
         e.preventDefault();  
         e.stopPropagation();
         
-        const response = await httpClient.post('//localhost:8000/watchlist/series/remove', {
+        const response = await httpClient.post('https://disneyflask.onrender.com/watchlist/series/remove', {
             id: movie.id
         });
 

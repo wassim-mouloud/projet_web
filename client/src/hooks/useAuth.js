@@ -13,9 +13,11 @@ function useAuth() {
                     setUser(resp.data);
                 } else {
                     setUser(null);
+                    console.log(resp.data);
                 }
             } catch (error) {
                 setUser(null);
+                console.error(error);
             }
             setIsLoading(false);
         };

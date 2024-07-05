@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../App.css';
 import httpClient from '../httpClient';
@@ -7,6 +7,8 @@ import useAuth from '../hooks/useAuth';
 function Navbar() {
     const { pathname } = useLocation();
     const { user, isLoading } = useAuth();
+
+        
 
     const logoutUser = async () => {
         await httpClient.post("https://disneyflask.onrender.com/logout");
