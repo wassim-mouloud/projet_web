@@ -9,7 +9,7 @@ function Navbar() {
     const { user, isLoading } = useAuth();
 
     const logoutUser = async () => {
-        await httpClient.post("//localhost:8000/logout");
+        await httpClient.post("https://disneyflask.onrender.com/logout");
         window.location.href = "/";
     };
 

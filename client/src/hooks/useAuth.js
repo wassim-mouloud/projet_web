@@ -8,7 +8,7 @@ function useAuth() {
     useEffect(() => {
         const checkUser = async () => {
             try {
-                const resp = await httpClient.get("//localhost:8000/@me", { withCredentials: true });
+                const resp = await httpClient.get("https://disneyflask.onrender.com/@me", { withCredentials: true });
                 if (resp.status === 200) {
                     setUser(resp.data);
                 } else {
