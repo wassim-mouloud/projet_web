@@ -13,7 +13,7 @@ function Watchlist({ hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave
 
   const fetchSeriesWatchlist = async () => {
     try {
-      const response = await httpClient.get('//localhost:8000/watchlist/series');
+      const response = await httpClient.get('https://disneyflask.onrender.com/watchlist/series');
       if (response.status === 200) {
         setWatchlistSeries(response.data);
       } else {
@@ -26,7 +26,7 @@ function Watchlist({ hovered, hoveredMovieId, handleMouseEnter, handleMouseLeave
 
   const fetchMoviesWatchlist = async () => {
     try {
-      const response = await httpClient.get('//localhost:8000/watchlist/movies');
+      const response = await httpClient.get('https://disneyflask.onrender.com/watchlist/movies');
       if (response.status === 200) {
         setWatchlistMovies(response.data);
       } else {

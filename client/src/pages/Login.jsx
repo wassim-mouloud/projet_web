@@ -11,7 +11,7 @@ function Login() {
 
     const loginUser = async () => {
       try {
-          const resp = await httpClient.post("//localhost:8000/login", { email, password });
+          const resp = await httpClient.post("https://disneyflask.onrender.com/login", { email, password });
           console.log(resp.data);
           window.location.href = "/"; 
           toast.success("Login successful!"); 
