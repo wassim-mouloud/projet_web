@@ -1,6 +1,6 @@
+# app.py
 from flask import Flask, request, abort, jsonify, session
 from flask_bcrypt import Bcrypt
-from flask_session import Session
 from flask_cors import CORS
 from models import db, User, WatchlistMovie, WatchlistSeries
 from config import ApplicationConfig
@@ -8,11 +8,10 @@ from config import ApplicationConfig
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
-CORS(app , supports_credentials = True)
-server_session = Session(app)
+CORS(app, supports_credentials=True)
 db.init_app(app)
 
-with app.app_context() :
+with app.app_context():
     db.create_all()
     
 @app.route("/register", methods=["POST"])
@@ -52,10 +51,10 @@ def login_user():
     user = User.query.filter_by(email=email).first()
 
     if user is None:
-        return jsonify({"error": "User does not exist"}), 404  # Changed to 404
+        return jsonify({"error": "User does not exist"}), 404 
 
     if not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"error": "Invalid password"}), 403  # Changed to 403
+        return jsonify({"error": "Invalid password"}), 403  
 
     session["user_id"] = user.id
     return jsonify({
