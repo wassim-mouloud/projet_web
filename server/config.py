@@ -11,3 +11,4 @@ class ApplicationConfig:
     SQLALCHEMY_DATABASE_URI = r"sqlite:///./db.sqlite"
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
+    SESSION_COOKIE_SECURE = True  # Set to True if using HTTPS

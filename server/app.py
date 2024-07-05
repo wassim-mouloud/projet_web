@@ -8,7 +8,7 @@ from config import ApplicationConfig
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 db.init_app(app)
 
 with app.app_context():
